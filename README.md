@@ -58,7 +58,3 @@ olympus-ai/
 - [ ] Memoria de conversas (guardar historico entre sessoes)
 - [ ] Navegacao web / pesquisa em tempo real
 - [ ] Apps movel e desktop
-
-## Enviar para o GitHub
-
-Ja esta ligado - o Claude faz push diretamente via GitHub, nao precisas de correr comandos manuais.
