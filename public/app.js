@@ -1,4 +1,53 @@
-// --- Navegação entre vistas (Chat / Código / Imagens) ---
+import { login, logout, watchAuth, saveHistory, loadHistory } from "./firebase-init.js";
+
+const loginScreen = document.getElementById('login-screen');
+const appEl = document.getElementById('app');
+const loginBtn = document.getElementById('login-btn');
+const logoutBtn = document.getElementById('logout-btn');
+
+const thread = document.getElementById('thread');
+const composer = document.getElementById('composer');
+const input = document.getElementById('input');
+
+let history = [];
+let currentUser = null;
+
+loginBtn.addEventListener('click', () => {
+  login().catch((err) => alert('Nao consegui entrar: ' + err.message));
+});
+
+logoutBtn.addEventListener('click', () => {
+  logout();
+});
+
+watchAuth(async (user) => {
+  currentUser = user;
+
+  if (user) {
+    loginScreen.hidden = true;
+    appEl.hidden = false;
+    history = await loadHistory(user.uid);
+    renderHistory();
+  } else {
+    loginScreen.hidden = false;
+    appEl.hidden = true;
+    history = [];
+  }
+});
+
+function renderHistory() {
+  thread.innerHTML = '';
+  if (history.length === 0) {
+    thread.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-glyph">O</div>
+        <p>Escolhe um modelo acima e escreve a tua primeira mensagem.</p>
+      </div>`;
+    return;
+  }
+  history.forEach((m) => addMessage(m.role, m.content));
+}
+
 document.querySelectorAll('.rail-item').forEach((btn) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.rail-item').forEach((b) => b.classList.remove('active'));
@@ -8,8 +57,7 @@ document.querySelectorAll('.rail-item').forEach((btn) => {
   });
 });
 
-// --- Seleção do modelo (GPT / Claude / Gemini) ---
-let currentProvider = 'openai';
+let currentProvider = 'google';
 document.querySelectorAll('.pantheon-chip').forEach((chip) => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('.pantheon-chip').forEach((c) => c.classList.remove('active'));
@@ -17,13 +65,8 @@ document.querySelectorAll('.pantheon-chip').forEach((chip) => {
     currentProvider = chip.dataset.provider;
   });
 });
-
-// --- Chat ---
-const thread = document.getElementById('thread');
-const composer = document.getElementById('composer');
-const input = document.getElementById('input');
-
-let history = [];
+document.querySelector('.pantheon-chip[data-provider="google"]')?.classList.add('active');
+document.querySelector('.pantheon-chip[data-provider="openai"]')?.classList.remove('active');
 
 function addMessage(role, text) {
   const emptyState = thread.querySelector('.empty-state');
@@ -40,7 +83,7 @@ function addMessage(role, text) {
 composer.addEventListener('submit', async (e) => {
   e.preventDefault();
   const text = input.value.trim();
-  if (!text) return;
+  if (!text || !currentUser) return;
 
   addMessage('user', text);
   history.push({ role: 'user', content: text });
@@ -67,13 +110,14 @@ composer.addEventListener('submit', async (e) => {
     pending.textContent = data.reply;
     pending.classList.remove('pending');
     history.push({ role: 'assistant', content: data.reply });
+
+    await saveHistory(currentUser.uid, history);
   } catch (err) {
-    pending.textContent = 'Não consegui ligar ao servidor. Confirma que o "npm start" está a correr.';
+    pending.textContent = 'Nao consegui ligar ao servidor. Confirma que o "npm start" esta a correr.';
     pending.classList.remove('pending');
   }
 });
 
-// Textarea cresce automaticamente e Enter envia (Shift+Enter = nova linha)
 input.addEventListener('input', () => {
   input.style.height = 'auto';
   input.style.height = input.scrollHeight + 'px';

@@ -10,12 +10,20 @@
 </head>
 <body>
 
-<div class="app">
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="mark login-mark">O</div>
+    <h1>Olympus</h1>
+    <p>Entra para continuares a mesma conversa em qualquer dispositivo.</p>
+    <button id="login-btn" class="login-btn">Entrar com Google</button>
+  </div>
+</div>
 
-  <!-- Barra lateral -->
+<div class="app" id="app" hidden>
+
   <aside class="rail">
     <div class="rail-top">
-      <div class="mark">Ω</div>
+      <div class="mark">O</div>
     </div>
 
     <nav class="rail-nav">
@@ -23,9 +31,9 @@
         <span class="rail-dot"></span>
         <span class="rail-label">Chat</span>
       </button>
-      <button class="rail-item" data-view="code" title="Código">
+      <button class="rail-item" data-view="code" title="Codigo">
         <span class="rail-dot"></span>
-        <span class="rail-label">Código</span>
+        <span class="rail-label">Codigo</span>
       </button>
       <button class="rail-item" data-view="gallery" title="Imagens">
         <span class="rail-dot"></span>
@@ -38,16 +46,16 @@
         <span class="status-pulse"></span>
         <span>Ligado</span>
       </div>
+      <button id="logout-btn" class="logout-btn" title="Sair">X</button>
     </div>
   </aside>
 
-  <!-- Vista principal: Chat -->
   <main class="view view-chat active">
 
     <header class="topbar">
       <div class="topbar-title">
         <h1>Olympus</h1>
-        <p>o teu conselho de deuses, num só lugar</p>
+        <p>o teu conselho de deuses, num so lugar</p>
       </div>
 
       <div class="pantheon">
@@ -59,7 +67,7 @@
 
     <section class="thread" id="thread">
       <div class="empty-state">
-        <div class="empty-glyph">Ω</div>
+        <div class="empty-glyph">O</div>
         <p>Escolhe um modelo acima e escreve a tua primeira mensagem.</p>
       </div>
     </section>
@@ -74,26 +82,24 @@
     </form>
   </main>
 
-  <!-- Vista: Código (esqueleto para a próxima fase) -->
   <main class="view view-code">
     <div class="placeholder-view">
       <div class="placeholder-glyph mono">&gt;_</div>
-      <h2>Painel de código</h2>
-      <p>O módulo de execução e assistência de código chega na próxima fase, com aspeto de consola / terminal.</p>
+      <h2>Painel de codigo</h2>
+      <p>O modulo de execucao e assistencia de codigo chega na proxima fase, com aspeto de consola / terminal.</p>
     </div>
   </main>
 
-  <!-- Vista: Imagens (esqueleto para a próxima fase) -->
   <main class="view view-gallery">
     <div class="placeholder-view">
-      <div class="placeholder-glyph">◆</div>
+      <div class="placeholder-glyph">*</div>
       <h2>Galeria</h2>
-      <p>O museu de imagens geradas chega na próxima fase.</p>
+      <p>O museu de imagens geradas chega na proxima fase.</p>
     </div>
   </main>
 
 </div>
 
-<script src="app.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
