@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Olympus AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Barra lateral -->
+  <aside class="rail">
+    <div class="rail-top">
+      <div class="mark">Ω</div>
+    </div>
+
+    <nav class="rail-nav">
+      <button class="rail-item active" data-view="chat" title="Chat">
+        <span class="rail-dot"></span>
+        <span class="rail-label">Chat</span>
+      </button>
+      <button class="rail-item" data-view="code" title="Código">
+        <span class="rail-dot"></span>
+        <span class="rail-label">Código</span>
+      </button>
+      <button class="rail-item" data-view="gallery" title="Imagens">
+        <span class="rail-dot"></span>
+        <span class="rail-label">Imagens</span>
+      </button>
+    </nav>
+
+    <div class="rail-bottom">
+      <div class="status">
+        <span class="status-pulse"></span>
+        <span>Ligado</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Vista principal: Chat -->
+  <main class="view view-chat active">
+
+    <header class="topbar">
+      <div class="topbar-title">
+        <h1>Olympus</h1>
+        <p>o teu conselho de deuses, num só lugar</p>
+      </div>
+
+      <div class="pantheon">
+        <button class="pantheon-chip active" data-provider="openai">GPT</button>
+        <button class="pantheon-chip" data-provider="anthropic">Claude</button>
+        <button class="pantheon-chip" data-provider="google">Gemini</button>
+      </div>
+    </header>
+
+    <section class="thread" id="thread">
+      <div class="empty-state">
+        <div class="empty-glyph">Ω</div>
+        <p>Escolhe um modelo acima e escreve a tua primeira mensagem.</p>
+      </div>
+    </section>
+
+    <form class="composer" id="composer">
+      <textarea id="input" placeholder="Pergunta ao Olympus..." rows="1"></textarea>
+      <button type="submit" id="send-btn" aria-label="Enviar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M4 12L20 4L13 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </form>
+  </main>
+
+  <!-- Vista: Código (esqueleto para a próxima fase) -->
+  <main class="view view-code">
+    <div class="placeholder-view">
+      <div class="placeholder-glyph mono">&gt;_</div>
+      <h2>Painel de código</h2>
+      <p>O módulo de execução e assistência de código chega na próxima fase, com aspeto de consola / terminal.</p>
+    </div>
+  </main>
+
+  <!-- Vista: Imagens (esqueleto para a próxima fase) -->
+  <main class="view view-gallery">
+    <div class="placeholder-view">
+      <div class="placeholder-glyph">◆</div>
+      <h2>Galeria</h2>
+      <p>O museu de imagens geradas chega na próxima fase.</p>
+    </div>
+  </main>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
