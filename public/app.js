@@ -1,4 +1,6 @@
 import { login, logout, watchAuth, saveHistory, loadHistory } from "./firebase-init.js";
+import { initCodeModule } from "./code-module.js";
+import { initGalleryModule } from "./gallery-module.js";
 
 const loginScreen = document.getElementById('login-screen');
 const appEl = document.getElementById('app');
@@ -11,13 +13,24 @@ const input = document.getElementById('input');
 
 let history = [];
 let currentUser = null;
+let currentProvider = 'google';
 
-loginBtn.addEventListener('click', () => {
-  login().catch((err) => alert('Nao consegui entrar: ' + err.message));
+loginBtn.addEventListener('click', async () => {
+  try {
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'A entrar...';
+    await login();
+  } catch (err) {
+    alert('Nao consegui entrar: ' + err.message);
+    loginBtn.disabled = false;
+    loginBtn.textContent = 'Entrar com Google';
+  }
 });
 
-logoutBtn.addEventListener('click', () => {
-  logout();
+logoutBtn.addEventListener('click', async () => {
+  if (confirm('Tem a certeza que queres sair?')) {
+    await logout();
+  }
 });
 
 watchAuth(async (user) => {
@@ -26,8 +39,15 @@ watchAuth(async (user) => {
   if (user) {
     loginScreen.hidden = true;
     appEl.hidden = false;
-    history = await loadHistory(user.uid);
+    try {
+      history = await loadHistory(user.uid);
+    } catch (err) {
+      console.error('Erro ao carregar historico:', err);
+      history = [];
+    }
     renderHistory();
+    initCodeModule();
+    initGalleryModule();
   } else {
     loginScreen.hidden = false;
     appEl.hidden = true;
@@ -48,6 +68,31 @@ function renderHistory() {
   history.forEach((m) => addMessage(m.role, m.content));
 }
 
+function addMessage(role, text) {
+  const emptyState = thread.querySelector('.empty-state');
+  if (emptyState) emptyState.remove();
+  const el = document.createElement('div');
+  el.className = `msg ${role}`;
+  el.innerHTML = sanitizeAndFormatText(text);
+  thread.appendChild(el);
+  thread.scrollTop = thread.scrollHeight;
+  return el;
+}
+
+function sanitizeAndFormatText(text) {
+  let html = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  html = html
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/__(.+?)__/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/_(.+?)_/g, '<em>$1</em>')
+    .replace(/`(.+?)`/g, '<code>$1</code>');
+  return html;
+}
+
 document.querySelectorAll('.rail-item').forEach((btn) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.rail-item').forEach((b) => b.classList.remove('active'));
@@ -57,7 +102,6 @@ document.querySelectorAll('.rail-item').forEach((btn) => {
   });
 });
 
-let currentProvider = 'google';
 document.querySelectorAll('.pantheon-chip').forEach((chip) => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('.pantheon-chip').forEach((c) => c.classList.remove('active'));
@@ -65,20 +109,9 @@ document.querySelectorAll('.pantheon-chip').forEach((chip) => {
     currentProvider = chip.dataset.provider;
   });
 });
+
 document.querySelector('.pantheon-chip[data-provider="google"]')?.classList.add('active');
 document.querySelector('.pantheon-chip[data-provider="openai"]')?.classList.remove('active');
-
-function addMessage(role, text) {
-  const emptyState = thread.querySelector('.empty-state');
-  if (emptyState) emptyState.remove();
-
-  const el = document.createElement('div');
-  el.className = `msg ${role}`;
-  el.textContent = text;
-  thread.appendChild(el);
-  thread.scrollTop = thread.scrollHeight;
-  return el;
-}
 
 composer.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -102,25 +135,29 @@ composer.addEventListener('submit', async (e) => {
     const data = await res.json();
 
     if (data.error) {
-      pending.textContent = 'Erro: ' + data.error;
+      pending.innerHTML = sanitizeAndFormatText(`Erro: ${data.error}`);
       pending.classList.remove('pending');
       return;
     }
 
-    pending.textContent = data.reply;
+    pending.innerHTML = sanitizeAndFormatText(data.reply);
     pending.classList.remove('pending');
     history.push({ role: 'assistant', content: data.reply });
 
-    await saveHistory(currentUser.uid, history);
+    try {
+      await saveHistory(currentUser.uid, history);
+    } catch (err) {
+      console.error('Erro ao guardar historico:', err);
+    }
   } catch (err) {
-    pending.textContent = 'Nao consegui ligar ao servidor. Confirma que o "npm start" esta a correr.';
+    pending.innerHTML = sanitizeAndFormatText('Nao consegui ligar ao servidor.');
     pending.classList.remove('pending');
   }
 });
 
 input.addEventListener('input', () => {
   input.style.height = 'auto';
-  input.style.height = input.scrollHeight + 'px';
+  input.style.height = Math.min(input.scrollHeight, 160) + 'px';
 });
 
 input.addEventListener('keydown', (e) => {
@@ -129,3 +166,5 @@ input.addEventListener('keydown', (e) => {
     composer.requestSubmit();
   }
 });
+
+console.log('Olympus AI iniciado');
