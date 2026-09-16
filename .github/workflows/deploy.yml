@@ -1,0 +1,22 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Trigger Render Deploy
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK" ]; then
+            echo "Aviso: RENDER_DEPLOY_HOOK nao configurado"
+            echo "Vai a: https://dashboard.render.com/ -> Settings -> Deploy Hook"
+            exit 0
+          fi
+          curl -X POST $RENDER_DEPLOY_HOOK

@@ -1,73 +1,77 @@
-# Olympus AI
+# 🔺 Olympus AI
 
-O teu proprio hub de IA: chat com Gemini/GPT/Claude, codigo e imagens, numa so interface minimalista e responsiva.
+O teu hub de IA: **chat com Gemini/GPT/Claude + código + imagens**, numa única interface elegante e minimalista.
 
-## Funcionalidades
+## ✨ Features
 
-✅ **Chat multi-modelo** — Escolhe entre Gemini (gratuito), GPT-4 ou Claude  
-✅ **Login com Google** — Uma conta, sincronizado em todos os dispositivos  
-✅ **Conversas persistentes** — Historico guardado no Firebase, continua onde ficou  
-✅ **Design minimalista** — Inspirado em WHOOP e iPhone, ouro e preto  
-✅ **Pronto para producao** — Publicado em Render (ou Railway) com um clique  
+- **Chat multi-modelo** — Gemini (gratuito), GPT-4, Claude
+- **Executa código** — JavaScript no browser com output em tempo real
+- **Gera imagens** — Prompts viram imagens com um clique
+- **Login com Google** — Sincronizado em todos os dispositivos
+- **Histórico persistente** — Firebase guarda tudo
+- **Design limpo** — WHOOP + iPhone style, ouro e preto
+- **Pronto para produção** — Deploy no Render em 2 cliques
 
-## Comecar localmente (5 minutos)
+## 🚀 Deploy Rápido (Render)
 
-1. **Clone o repositorio:**
-   ```bash
-   git clone https://github.com/SEU_USERNAME/Olympus.AI.git
-   cd Olympus.AI
-   ```
+1. **Vai a render.com** (login com GitHub)
+2. **"New Web Service"** → Seleciona `Olympus.AI`
+3. **Deixa render.yaml configurar tudo** ✓
+4. **Ambiente → Adiciona:**
+   GOOGLE_API_KEY = AIzaSyCwyUU3C52mYunwhVlMVb2VX8QoZ2NHMoY
+5. **"Create"** — Pronto em 2-3 minutos! 🎉
 
-2. **Configura o backend:**
-   ```bash
-   cd server
-   cp .env.example .env
-   # Edita .env e cola: GOOGLE_API_KEY=YOUR_KEY_HERE
-   npm install
-   ```
+👉 [Ver guia completo →](./DEPLOYMENT.md)
 
-3. **Configura o Firebase** (ja pronto no codigo):
-   - A configuracao esta em `public/firebase-config.js` (ja atualizada com o teu projeto)
+## 💻 Local Dev
 
-4. **Corre localmente:**
-   ```bash
-   npm start
-   # Abre http://localhost:3000
-   ```
+```bash
+git clone https://github.com/AnaAbreu757/Olympus.AI.git
+cd Olympus.AI/server
+cp .env.example .env
+# Cola a chave no .env
+npm install && npm start
+# Abre http://localhost:3000
+```
 
-## Publicar online em 2 minutos (Render)
-
-1. Entra em **render.com** → "New+" → "Web Service"
-2. Liga o teu repositorio GitHub (Olympus.AI)
-3. As definicoes ja aparecem auto-preenchidas do ficheiro `render.yaml`
-4. Adiciona a variavel de ambiente `GOOGLE_API_KEY` no painel do Render
-5. Clica em "Create Web Service"
-
-Em 2-3 minutos, a tua app esta online em `https://olympus-ai-XXXXX.onrender.com`
-
-## Estrutura
+## 📂 Estrutura
 
 ```
 olympus-ai/
-|- server/
-|  |- server-prod.js      (servidor otimizado para producao)
-|  |- server.js           (versao dev)
-|  |- package.json
-|  `- .env.example
-|- public/
-|  |- index.html
-|  |- style.css
-|  |- app.js
-|  |- firebase-init.js
-|  `- firebase-config.js  (configuracao do Firebase)
-|- render.yaml             (deploy automatico)
-`- Procfile               (instrucao de startup)
+├── server/              → Backend (Node.js)
+├── public/              → Frontend (HTML/CSS/JS)
+├── .github/workflows/   → Deploy automatico
+├── render.yaml
+└── DEPLOYMENT.md        → Guia completo
 ```
 
-## Modelos disponiveis
+## 🔑 Chaves de API
 
-| Modelo | Gratuito | Qualidade | Velocidade |
-|--------|----------|-----------|----------|
-| Gemini 2.0 Flash | ✅ Sim | Muito boa | Rapido |
-| GPT-4o mini | ❌ Pago | Excelente | Medio |
-| Claude 3.5 Sonnet | ❌ Pago | Excelente | Medio |
+- **Gemini** (gratuita) → `GOOGLE_API_KEY` ✓
+- **GPT-4** (opcional) → `OPENAI_API_KEY`
+- **Claude** (opcional) → `ANTHROPIC_API_KEY`
+
+## 🎨 Design
+
+- Cores: Preto + Ouro
+- Responsivo: Mobile → Desktop  
+- Sem dependencias (JS puro)
+
+## 📱 Funciona em
+
+✅ Desktop
+✅ Tablet
+✅ Mobile (web app)
+
+## 🛠 Tech Stack
+
+- Frontend: HTML5, CSS3, JavaScript ES6
+- Backend: Node.js + Express
+- Database: Firebase (Auth + Firestore)
+- Deploy: Render + GitHub Actions
+
+## 🚀 Pronto para Usar!
+
+Versao 1.0 — Funcional. Elegante. Simples.
+
+Feito com ❤️
