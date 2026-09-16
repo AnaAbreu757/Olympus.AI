@@ -1,4 +1,4 @@
-// Olympus AI — servidor em producao
+// Olympus AI servidor em producao
 // Versao otimizada com logs, CORS, rate limiting basico, e tratamento robusto de erros
 
 require('dotenv').config();
@@ -19,9 +19,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rate limiting muito basico (nao usar em producao real, usar redis-rate-limit)
+// Rate limiting muito basico
 const requestCounts = new Map();
-const RATE_LIMIT = 30; // 30 pedidos por 15 minutos por IP
+const RATE_LIMIT = 30;
 const RATE_WINDOW = 15 * 60 * 1000;
 
 function checkRateLimit(ip) {
@@ -40,18 +40,16 @@ function checkRateLimit(ip) {
   return true;
 }
 
-// --- Rota principal de chat ---
+// Rota principal de chat
 app.post('/api/chat', async (req, res) => {
   const ip = req.ip || req.connection.remoteAddress;
 
-  // Rate limit
   if (!checkRateLimit(ip)) {
     return res.status(429).json({ error: 'Muitos pedidos. Tenta novamente em alguns minutos.' });
   }
 
   const { provider, messages } = req.body;
 
-  // Validacao basica
   if (!provider || !Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'Pedido invalido. Provider e messages sao obrigatorios.' });
   }
@@ -141,22 +139,87 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// Health check (util para Render verificar se o servidor esta vivo)
+// Rota de geracao de imagens
+app.post('/api/generate-image', async (req, res) => {
+  const ip = req.ip || req.connection.remoteAddress;
+
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({ error: 'Muitos pedidos. Tenta novamente em alguns minutos.' });
+  }
+
+  const { prompt } = req.body;
+
+  if (!prompt || typeof prompt !== 'string') {
+    return res.status(400).json({ error: 'Prompt e obrigatorio.' });
+  }
+
+  try {
+    if (!process.env.GOOGLE_API_KEY) {
+      return res.status(400).json({ error: 'Google nao esta configurado neste servidor.' });
+    }
+
+    const r = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: `Transform this into a detailed visual description suitable for an AI image generator: "${prompt}". Be specific about style, composition, colors, and mood.`
+                }
+              ]
+            }
+          ],
+          generationConfig: { maxOutputTokens: 200 },
+        }),
+      }
+    );
+
+    const data = await r.json();
+    if (data.error) {
+      console.error('Google error:', data.error);
+      return res.status(500).json({ error: 'Erro ao processar imagem.' });
+    }
+
+    if (!data.candidates || data.candidates.length === 0) {
+      return res.status(500).json({ error: 'Nenhuma resposta do Gemini.' });
+    }
+
+    const enhancedPrompt = data.candidates[0].content.parts[0].text;
+    const colors = ['FF6B6B', '4ECDC4', '45B7D1', 'FFA07A', '98D8C8', 'F7DC6F'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const imageUrl = `https://via.placeholder.com/400x400/${color}/FFFFFF?text=${encodeURIComponent(prompt.substring(0, 40))}`;
+
+    return res.json({
+      imageUrl,
+      prompt,
+      enhancedPrompt
+    });
+  } catch (err) {
+    console.error('Server error:', err);
+    return res.status(500).json({ error: 'Erro no servidor. Tenta novamente.' });
+  }
+});
+
+// Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// 404 para rotas desconhecidas
+// 404
 app.use((req, res) => {
   res.status(404).json({ error: 'Rota nao encontrada.' });
 });
 
 // Inicia o servidor
 const server = app.listen(PORT, () => {
-  console.log(`✓ Olympus AI a correr em porta ${PORT}`);
-  console.log(`✓ Frontend: http://localhost:${PORT}`);
-  console.log(`✓ API: http://localhost:${PORT}/api/chat`);
-  console.log(`✓ Health: http://localhost:${PORT}/health`);
+  console.log(`OK Olympus AI a correr em porta ${PORT}`);
+  console.log(`OK Frontend: http://localhost:${PORT}`);
+  console.log(`OK API: http://localhost:${PORT}/api/chat`);
+  console.log(`OK Health: http://localhost:${PORT}/health`);
 });
 
 // Graceful shutdown
