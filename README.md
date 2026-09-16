@@ -1,7 +1,5 @@
 # 🔺 Olympus AI
 
-O teu hub de IA: **chat com Gemini/GPT/Claude + código + imagens**, numa única interface elegante e minimalista.
-
 ## ✨ Features
 
 - **Chat multi-modelo** — Gemini (gratuito), GPT-4, Claude
@@ -72,6 +70,4 @@ olympus-ai/
 
 ## 🚀 Pronto para Usar!
 
-Versao 1.0 — Funcional. Elegante. Simples.
-
-Feito com ❤️
+Versao 1.0 
