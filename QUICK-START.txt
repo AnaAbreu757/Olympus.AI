@@ -1,0 +1,63 @@
+╔════════════════════════════════════════════════════════════╗
+║           🔺 OLYMPUS AI — PRONTO PARA USAR 🔺             ║
+║                    v1.0 Production Ready                   ║
+╚════════════════════════════════════════════════════════════╝
+
+📍 LOCALIZAÇÃO DO REPOSITÓRIO
+→ https://github.com/AnaAbreu757/Olympus.AI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ DEPLOY EM 5 MINUTOS (Render)
+
+1️⃣  Abre: https://render.com
+    └─ Clica: Login com GitHub
+
+2️⃣  No dashboard, clica: "New +" → "Web Service"
+
+3️⃣  Seleciona repositório: AnaAbreu757/Olympus.AI
+
+4️⃣  Deixa TUDO como está (render.yaml configura automaticamente)
+    ✓ Build Command: cd server && npm install
+    ✓ Start Command: cd server && npm start
+
+5️⃣  Clica: "Create Web Service"
+
+6️⃣  Após criado, vai a "Environment" e adiciona:
+    ┌─ Name: GOOGLE_API_KEY
+    └─ Value: AIzaSyCwyUU3C52mYunwhVlMVb2VX8QoZ2NHMoY
+
+7️⃣  Clica "Save" — Aguarda 2-3 minutos ⏳
+
+8️⃣  PRONTO! 🎉 A app fica online em:
+    https://olympus-ai-[RANDOM].onrender.com
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧪 TESTAR LOCALMENTE (Opcional)
+
+$ git clone https://github.com/AnaAbreu757/Olympus.AI.git
+$ cd Olympus.AI/server
+$ cp .env.example .env
+$ npm install
+$ npm start
+→ Abre: http://localhost:3000
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 O QUE TEM PRONTO
+
+✅ Chat com Gemini (gratuito), GPT-4 e Claude
+✅ Executor de código JavaScript
+✅ Galeria de imagens
+✅ Login com Google + sincronização
+✅ Design elegante (WHOOP + iPhone style)
+✅ Totalmente responsivo
+✅ Deploy automático configurado
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Versão 1.0 — Production Ready
+Feito com ❤️
+
+🚀 Pronto para ir para o ar!
