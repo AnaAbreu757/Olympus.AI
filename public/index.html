@@ -83,18 +83,46 @@
   </main>
 
   <main class="view view-code">
-    <div class="placeholder-view">
-      <div class="placeholder-glyph mono">&gt;_</div>
-      <h2>Painel de codigo</h2>
-      <p>O modulo de execucao e assistencia de codigo chega na proxima fase, com aspeto de consola / terminal.</p>
+    <div class="code-panel">
+      <div class="code-header">
+        <h2>&gt;_ Painel de Codigo</h2>
+        <div class="code-tabs">
+          <button class="code-tab active" data-lang="javascript">JavaScript</button>
+          <button class="code-tab" data-lang="python">Python</button>
+          <button class="code-tab" data-lang="html">HTML</button>
+        </div>
+      </div>
+
+      <div class="code-editor">
+        <textarea id="code-input" class="editor-input" placeholder="Escreve ou cola codigo aqui..."></textarea>
+        <div class="code-controls">
+          <button id="run-code-btn" class="code-btn">Executar</button>
+          <button id="clear-code-btn" class="code-btn secondary">Limpar</button>
+          <button id="ask-claude-code-btn" class="code-btn secondary">Explicar</button>
+        </div>
+      </div>
+
+      <div id="code-output" class="code-output">Resultado aqui...</div>
     </div>
   </main>
 
   <main class="view view-gallery">
-    <div class="placeholder-view">
-      <div class="placeholder-glyph">*</div>
-      <h2>Galeria</h2>
-      <p>O museu de imagens geradas chega na proxima fase.</p>
+    <div class="gallery-panel">
+      <div class="gallery-header">
+        <h2>* Galeria</h2>
+      </div>
+
+      <div class="prompt-input-group">
+        <textarea id="image-prompt" placeholder="Descreve a imagem que queres gerar..."></textarea>
+        <button id="generate-image-btn" class="generate-btn">Gerar</button>
+      </div>
+
+      <div id="gallery-grid" class="gallery-grid">
+        <div class="empty-gallery">
+          <div class="empty-gallery-icon">*</div>
+          <p>Nenhuma imagem ainda.</p>
+        </div>
+      </div>
     </div>
   </main>
 
