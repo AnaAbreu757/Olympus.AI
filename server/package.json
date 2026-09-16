@@ -1,10 +1,13 @@
 {
   "name": "olympus-ai-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Servidor do Olympus AI — liga a interface aos modelos OpenAI, Anthropic e Google",
   "main": "server.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
-    "start": "node server.js",
+    "start": "node server-prod.js",
     "dev": "node --watch server.js"
   },
   "dependencies": {

@@ -1,60 +1,73 @@
 # Olympus AI
 
-O teu proprio hub de IA: chat, codigo e imagens, numa so interface.
+O teu proprio hub de IA: chat com Gemini/GPT/Claude, codigo e imagens, numa so interface minimalista e responsiva.
 
-## Fase atual: Chat
+## Funcionalidades
 
-Esta primeira versao tem o **chat de texto** a funcionar, com escolha entre GPT (OpenAI), Claude (Anthropic) e Gemini (Google). Os paineis de **Codigo** e **Imagens** ja aparecem na barra lateral, mas ainda estao vazios - sao a proxima fase.
+✅ **Chat multi-modelo** — Escolhe entre Gemini (gratuito), GPT-4 ou Claude  
+✅ **Login com Google** — Uma conta, sincronizado em todos os dispositivos  
+✅ **Conversas persistentes** — Historico guardado no Firebase, continua onde ficou  
+✅ **Design minimalista** — Inspirado em WHOOP e iPhone, ouro e preto  
+✅ **Pronto para producao** — Publicado em Render (ou Railway) com um clique  
 
-## Como correr localmente
+## Comecar localmente (5 minutos)
 
-1. Entra na pasta `server`:
+1. **Clone o repositorio:**
+   ```bash
+   git clone https://github.com/SEU_USERNAME/Olympus.AI.git
+   cd Olympus.AI
    ```
+
+2. **Configura o backend:**
+   ```bash
    cd server
+   cp .env.example .env
+   # Edita .env e cola: GOOGLE_API_KEY=YOUR_KEY_HERE
    npm install
    ```
-2. Copia o ficheiro de exemplo e cola as tuas chaves:
-   ```
-   cp .env.example .env
-   ```
-   Depois abre o `.env` e preenche pelo menos `GOOGLE_API_KEY` (gratuita, via aistudio.google.com). `OPENAI_API_KEY` e `ANTHROPIC_API_KEY` sao opcionais e pedem cartao associado.
-3. Abre `public/firebase-config.js` e substitui os valores `"COLA_AQUI"` pela configuracao do teu projeto Firebase (Firebase Console -> Project settings -> Your apps -> icone Web).
-4. Arranca o servidor:
-   ```
+
+3. **Configura o Firebase** (ja pronto no codigo):
+   - A configuracao esta em `public/firebase-config.js` (ja atualizada com o teu projeto)
+
+4. **Corre localmente:**
+   ```bash
    npm start
+   # Abre http://localhost:3000
    ```
-5. Abre o browser em `http://localhost:3000`, faz login com Google, e comeca a conversar.
 
-### Firebase (login + sincronizacao entre dispositivos)
+## Publicar online em 2 minutos (Render)
 
-1. Cria um projeto em console.firebase.google.com.
-2. Em **Authentication -> Sign-in method**, ativa o fornecedor **Google**.
-3. Em **Firestore Database**, cria uma base de dados (modo de teste para comecar).
-4. Em **Project settings -> Your apps**, regista uma app Web e copia a configuracao para `public/firebase-config.js`.
+1. Entra em **render.com** → "New+" → "Web Service"
+2. Liga o teu repositorio GitHub (Olympus.AI)
+3. As definicoes ja aparecem auto-preenchidas do ficheiro `render.yaml`
+4. Adiciona a variavel de ambiente `GOOGLE_API_KEY` no painel do Render
+5. Clica em "Create Web Service"
 
-Com isto, cada utilizador entra com a conta Google e a conversa fica guardada no Firestore - abre noutro telemovel ou computador e a conversa continua onde ficou.
+Em 2-3 minutos, a tua app esta online em `https://olympus-ai-XXXXX.onrender.com`
 
-## Estrutura do projeto
+## Estrutura
 
 ```
 olympus-ai/
-|- server/          -> backend (Node/Express), guarda as chaves em seguranca
-|  |- server.js
+|- server/
+|  |- server-prod.js      (servidor otimizado para producao)
+|  |- server.js           (versao dev)
 |  |- package.json
 |  `- .env.example
-|- public/          -> frontend (HTML/CSS/JS puro, sem build step)
+|- public/
 |  |- index.html
 |  |- style.css
 |  |- app.js
 |  |- firebase-init.js
-|  `- firebase-config.js   -> cola aqui a tua configuracao Firebase
-`- .gitignore
+|  `- firebase-config.js  (configuracao do Firebase)
+|- render.yaml             (deploy automatico)
+`- Procfile               (instrucao de startup)
 ```
 
-## Roteiro (proximas fases)
+## Modelos disponiveis
 
-- [ ] Painel de codigo - estilo consola/terminal, com execucao real
-- [ ] Galeria de imagens - geracao via Gemini/DALL-E, layout "mini-museu"
-- [ ] Memoria de conversas (guardar historico entre sessoes)
-- [ ] Navegacao web / pesquisa em tempo real
-- [ ] Apps movel e desktop
+| Modelo | Gratuito | Qualidade | Velocidade |
+|--------|----------|-----------|----------|
+| Gemini 2.0 Flash | ✅ Sim | Muito boa | Rapido |
+| GPT-4o mini | ❌ Pago | Excelente | Medio |
+| Claude 3.5 Sonnet | ❌ Pago | Excelente | Medio |
