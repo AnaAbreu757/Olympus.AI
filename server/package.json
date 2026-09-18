@@ -1,14 +1,13 @@
 {
   "name": "olympus-ai-server",
-  "version": "0.2.0",
-  "description": "Servidor do Olympus AI — liga a interface aos modelos OpenAI, Anthropic e Google",
-  "main": "server.js",
-  "engines": {
-    "node": "18.x"
-  },
+  "version": "2.0.0",
+  "description": "Olympus AI v2 - IA Unificada com routing inteligente, raciocinio avancado e Composio",
+  "main": "server-v2.js",
+  "engines": { "node": "18.x" },
   "scripts": {
-    "start": "node server-prod.js",
-    "dev": "node --watch server.js"
+    "start": "node server-v2.js",
+    "dev": "node --watch server-v2.js",
+    "dev-v1": "node --watch server.js"
   },
   "dependencies": {
     "express": "^4.19.2",
