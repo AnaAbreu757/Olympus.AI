@@ -1,16 +1,14 @@
 # 🔺 Olympus AI v2 Advanced
 
-**Uma IA verdadeiramente unificada** — Não é várias IAs integradas. É uma IA própria com todas as capacidades combinadas.
-
-> **[⚡ CLICA AQUI PARA FAZER DEPLOY EM 1 MINUTO](./README-DEPLOY.md)** ← Abre direto no browser!
+**Uma IA verdadeiramente unificada no browser — Sem downloads, sem servidores.**
 
 ---
 
-## 🚀 Deploy Automático (1 CLIQUE!)
+## 🚀 USA AGORA (Direto no Browser)
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/AnaAbreu757/Olympus.AI)
+### 👉 **[CLICA AQUI PARA USAR](https://anaabreu757.github.io/Olympus.AI/)**
 
-**Ou vai direto aqui:** → [Guia de Deploy](./README-DEPLOY.md)
+**Pronto!** Abre na página e começas a usar! Sem instalar nada, sem downloads, 100% no browser.
 
 ---
 
@@ -19,60 +17,86 @@
 - **IA Própria** — Não é ChatGPT nem Claude, é OLYMPUS
 - **Combo de Modelos** — GPT (criatividade) + Claude (código) + Gemini (velocidade)
 - **Raciocínio Avançado** — Modo 🧠 para problemas complexos
-- **500+ Apps** — Integração com Composio (Gmail, Slack, GitHub, etc.)
-- **API Completa** — 10+ endpoints prontos para usar
+- **100% Browser** — Funciona direto na página, sem servidor
+- **Web App** — Usa como qualquer site normal
 
 ---
 
-## 🎯 Features Principais
+## 🎯 Como Usar
 
-✅ **IA Unificada** — Escolhe automaticamente Claude, GPT ou Gemini
-✅ **Raciocínio Avançado** — Modo chain-of-thought para problemas complexos
-✅ **500+ Apps** — Slack, Gmail, GitHub, Notion, Shopify, etc.
-✅ **Executa Código** — JavaScript com análise automática
-✅ **API Completa** — 10+ endpoints documentados
-✅ **Production Ready** — Cache, logging, rate limiting
-
----
-
-## 🔧 Como Começar
-
-### Online (Recomendado) ⭐
-👉 **[CLICA AQUI → DEPLOY AUTOMÁTICO](./README-DEPLOY.md)**
-
-Deploy automático em Render em 1 minuto, sem código!
-
-### Local (Desenvolvimento)
-
-```bash
-git clone https://github.com/AnaAbreu757/Olympus.AI.git
-cd Olympus.AI/server
-cp .env.example .env
-npm install && npm start
-# Abre: http://localhost:3000
-```
+1. **[👉 Clica aqui](https://anaabreu757.github.io/Olympus.AI/)**
+2. A página abre com a interface completa
+3. Escolhe o modelo (Gemini/GPT/Claude)
+4. Escreve uma pergunta
+5. Clica "Enviar"
+6. IA responde!
 
 ---
 
-## 🔑 Chaves de API Necessárias
+## 🔑 Chaves de API
 
-**Obrigatória (Gratuita):**
-- `GOOGLE_API_KEY` → https://ai.google.dev
+**Gemini (Gratuita):**
+- Já vem pré-configurada (gratuita)
+- Ou configura tua própria em ⚙️ Config
 
-**Opcionais:**
-- `OPENAI_API_KEY` → Para GPT-4o
-- `ANTHROPIC_API_KEY` → Para Claude
-
----
-
-## 📚 Documentação
-
-- **[README-DEPLOY.md](./README-DEPLOY.md)** — Deploy em 1 clique
-- **[API-DOCS.md](./API-DOCS.md)** — Documentação API
-- **[V2-FEATURES.md](./V2-FEATURES.md)** — Features detalhadas
+**GPT-4 e Claude (Opcionais):**
+- Va a ⚙️ Config (canto superior direito)
+- Cola as tuas chaves
+- Pronto!
 
 ---
 
-**Status: Production Ready ✅**
+## 📱 Compatibilidade
 
-Repositório: https://github.com/AnaAbreu757/Olympus.AI
+✅ Desktop (Chrome, Firefox, Safari, Edge)
+✅ Tablet (iPad, Android)
+✅ Mobile (iOS, Android)
+✅ Sem app para instalar
+✅ Tudo no browser
+
+---
+
+## ⚙️ Configuração
+
+Clica no botão ⚙️ no canto superior direito para:
+- Adicionar tuas chaves de API (opcional)
+- Ativar/desativar modo escuro
+- Guardar configurações
+
+---
+
+## 🚀 Features
+
+✅ Chat com 3 modelos (escolhe qual usar)
+✅ Raciocínio avançado (🧠 Chain-of-thought)
+✅ Interface limpa e responsiva
+✅ 100% privado (nada é guardado, a não ser na tua máquina)
+✅ Rápido (sem servidor lento)
+✅ Sempre online
+
+---
+
+## 🔒 Privacidade
+
+- Nenhum dado é enviado para servidor
+- As chamadas vão direto para OpenAI/Anthropic/Google
+- Configurações guardadas localmente no teu browser
+- Histórico não é guardado (refresh limpa tudo)
+
+---
+
+## 📞 Links
+
+- **Usa Aqui:** https://anaabreu757.github.io/Olympus.AI/
+- **GitHub:** https://github.com/AnaAbreu757/Olympus.AI
+- **Issues:** https://github.com/AnaAbreu757/Olympus.AI/issues
+
+---
+
+## 🎉 Pronto!
+
+Clica no link acima e começa a usar agora mesmo! 🔺⚡
+
+**Versão: 2.0 Advanced**  
+**Status: Production Ready ✅**  
+**Tipo: Web App (GitHub Pages)**

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔺 Olympus AI v2 - Web App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0B0C10;
+      --surface: #1A1B26;
+      --surface-raised: #252837;
+      --border: #403D3D;
+      --text: #FFFFFF;
+      --text-dim: #A9A9A9;
+      --gold: #C9A24B;
+      --accent: #FF6B6B;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      line-height: 1.6;
+    }
+
+    #app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .topbar {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .topbar h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    .topbar p {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--surface-raised);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .control-group label {
+      font-size: 11px;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    select {
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    #thread {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      padding-right: 10px;
+    }
+
+    #thread::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #thread::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #thread::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .msg {
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      line-height: 1.5;
+      font-size: 14px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .msg.user {
+      background: var(--surface-raised);
+      border-left: 3px solid var(--gold);
+      margin-left: 40px;
+    }
+
+    .msg.assistant {
+      background: rgba(201, 162, 75, 0.05);
+      border-left: 3px solid var(--gold);
+      margin-right: 40px;
+    }
+
+    .msg.pending {
+      opacity: 0.6;
+      font-style: italic;
+    }
+
+    .composer {
+      display: flex;
+      gap: 12px;
+      padding: 0;
+    }
+
+    #input {
+      flex: 1;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: none;
+      max-height: 160px;
+      transition: var(--transition);
+    }
+
+    #input:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: var(--surface);
+    }
+
+    .composer button {
+      background: var(--gold);
+      border: none;
+      color: var(--bg);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .composer button:hover {
+      background: #E8B85A;
+      transform: translateY(-2px);
+    }
+
+    .composer button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .status {
+      padding: 16px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-dim);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .status span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .error {
+      background: rgba(255, 107, 107, 0.1);
+      border-left-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .settings-panel {
+      width: 280px;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding: 20px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .settings-panel.visible {
+      display: block;
+    }
+
+    .settings-panel h3 {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .setting-item {
+      margin-bottom: 16px;
+      font-size: 12px;
+    }
+
+    .setting-item label {
+      display: block;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .setting-item input,
+    .setting-item textarea {
+      width: 100%;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: monospace;
+    }
+
+    .setting-item textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      color: var(--text-dim);
+    }
+
+    .empty-state-glyph {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      max-width: 300px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .controls {
+        flex-wrap: wrap;
+        width: 100%;
+      }
+
+      .container {
+        flex-direction: column;
+      }
+
+      .settings-panel {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid var(--border);
+      }
+
+      .msg.user {
+        margin-left: 20px;
+      }
+
+      .msg.assistant {
+        margin-right: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="topbar">
+      <div>
+        <h1>🔺 Olympus AI</h1>
+        <p>IA Unificada — GPT + Claude + Gemini</p>
+      </div>
+      <div class="controls">
+        <div class="control-group">
+          <label for="modelSelect">Modelo:</label>
+          <select id="modelSelect">
+            <option value="gemini">Gemini (Rápido, Gratuito)</option>
+            <option value="gpt">GPT-4o (Criatividade)</option>
+            <option value="claude">Claude (Código)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>
+            <input type="checkbox" id="chainOfThought">
+            🧠 Raciocínio
+          </label>
+        </div>
+        <button onclick="toggleSettings()" style="background: var(--surface-raised); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; cursor: pointer; border-radius: 4px;">⚙️ Config</button>
+      </div>
+    </div>
+
+    <div class="status">
+      <span><span class="dot"></span> Pronto</span>
+      <span id="modelInfo">Gemini 2.0 Flash</span>
+    </div>
+
+    <div class="container">
+      <div class="chat-area">
+        <div id="thread"></div>
+        <form class="composer" onsubmit="sendMessage(event)">
+          <textarea id="input" placeholder="Escreve qualquer coisa... (Shift+Enter para quebra de linha)" rows="1"></textarea>
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
+
+      <div class="settings-panel" id="settingsPanel">
+        <h3>Configuração</h3>
+        
+        <div class="setting-item">
+          <label>Chave Google (Gemini)</label>
+          <input type="password" id="googleKey" placeholder="AIzaSy...">
+        </div>
+
+        <div class="setting-item">
+          <label>Chave OpenAI (GPT)</label>
+          <input type="password" id="openaiKey" placeholder="sk-...">
+        </div>
+
+        <div class="setting-item">
+          <label>Chave Anthropic (Claude)</label>
+          <input type="password" id="anthropicKey" placeholder="sk-ant-...">
+        </div>
+
+        <div class="setting-item">
+          <label>
+            <input type="checkbox" id="darkMode" checked>
+            Modo Escuro
+          </label>
+        </div>
+
+        <button onclick="saveSettings()" style="width: 100%; background: var(--gold); color: var(--bg); border: none; padding: 8px; border-radius: 4px; font-weight: 600; cursor: pointer; margin-top: 20px;">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const thread = document.getElementById('thread');
+    const input = document.getElementById('input');
+    const modelSelect = document.getElementById('modelSelect');
+    const chainOfThought = document.getElementById('chainOfThought');
+
+    // Auto-resize textarea
+    input.addEventListener('input', () => {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 160) + 'px';
+    });
+
+    function toggleSettings() {
+      document.getElementById('settingsPanel').classList.toggle('visible');
+    }
+
+    function saveSettings() {
+      const settings = {
+        googleKey: document.getElementById('googleKey').value,
+        openaiKey: document.getElementById('openaiKey').value,
+        anthropicKey: document.getElementById('anthropicKey').value,
+        darkMode: document.getElementById('darkMode').checked
+      };
+      localStorage.setItem('olympus-settings', JSON.stringify(settings));
+      alert('Configurações guardadas!');
+    }
+
+    function loadSettings() {
+      const settings = JSON.parse(localStorage.getItem('olympus-settings') || '{}');
+      if (settings.googleKey) document.getElementById('googleKey').value = settings.googleKey;
+      if (settings.openaiKey) document.getElementById('openaiKey').value = settings.openaiKey;
+      if (settings.anthropicKey) document.getElementById('anthropicKey').value = settings.anthropicKey;
+    }
+
+    function addMessage(role, text) {
+      const el = document.createElement('div');
+      el.className = `msg ${role}`;
+      el.innerHTML = text.replace(/\n/g, '<br>');
+      thread.appendChild(el);
+      thread.scrollTop = thread.scrollHeight;
+      return el;
+    }
+
+    async function sendMessage(e) {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage('user', text);
+      input.value = '';
+      input.style.height = 'auto';
+
+      const pending = addMessage('assistant', '⏳ A processar...');
+      pending.classList.add('pending');
+
+      try {
+        const model = modelSelect.value;
+        const settings = JSON.parse(localStorage.getItem('olympus-settings') || '{}');
+        
+        let apiKey = '';
+        let endpoint = '';
+        let response = '';
+
+        if (model === 'gemini') {
+          apiKey = settings.googleKey || 'AIzaSyCwyUU3C52mYunwhVlMVb2VX8QoZ2NHMoY';
+          endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+          
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text }] }],
+              generationConfig: { maxOutputTokens: 2000 }
+            })
+          });
+          
+          const data = await res.json();
+          if (data.candidates) {
+            response = data.candidates[0].content.parts[0].text;
+          } else {
+            throw new Error(data.error?.message || 'Erro ao processar');
+          }
+        } else if (model === 'gpt') {
+          apiKey = settings.openaiKey;
+          if (!apiKey) throw new Error('Configura a chave OpenAI nas definições');
+          
+          const res = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o',
+              messages: [{ role: 'user', content: text }],
+              max_tokens: 2000
+            })
+          });
+          
+          const data = await res.json();
+          if (data.choices) {
+            response = data.choices[0].message.content;
+          } else {
+            throw new Error(data.error?.message || 'Erro ao processar');
+          }
+        } else if (model === 'claude') {
+          apiKey = settings.anthropicKey;
+          if (!apiKey) throw new Error('Configura a chave Anthropic nas definições');
+          
+          const res = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': apiKey,
+              'anthropic-version': '2023-06-01'
+            },
+            body: JSON.stringify({
+              model: 'claude-3-5-sonnet-20241022',
+              max_tokens: 2000,
+              messages: [{ role: 'user', content: text }]
+            })
+          });
+          
+          const data = await res.json();
+          if (data.content) {
+            response = data.content[0].text;
+          } else {
+            throw new Error(data.error?.message || 'Erro ao processar');
+          }
+        }
+
+        pending.classList.remove('pending');
+        pending.innerHTML = response;
+
+      } catch (err) {
+        pending.classList.remove('pending');
+        pending.classList.add('error');
+        pending.innerHTML = `❌ ${err.message}`;
+      }
+    }
+
+    // Initialize
+    loadSettings();
+    
+    // Show empty state
+    if (thread.children.length === 0) {
+      thread.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-glyph">🔺</div>
+          <p>Bem-vindo a Olympus AI! Eu sou uma IA unificada que combina o melhor de GPT, Claude e Gemini.</p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
